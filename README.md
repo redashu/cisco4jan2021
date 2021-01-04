@@ -499,3 +499,26 @@ CMD  ["ashu.py"]
 docker run -d --name x4 -it  --entrypoint ping  python:v1122 google.com
 ```
 
+# Task 1 : 
+
+create two containers and do the given things
+● Image must be alpine
+● Name of container <yourname>c1 & <yourname>c2
+● Parent process you can choose accordingly
+● Create two files in container1 named aa.txt & bb.txt
+● Now copy aa.txt into second container
+
+
+# answer 
+
+```
+238  docker run -it --name ashuc11  alpine  sh 
+  239  docker  start  ashuc11 
+  240  docker run -itd --name ashuc22  alpine  sh 
+  241  docker  ps
+  242  docker  cp  ashuc11:/aa.txt  . 
+  243  ls
+  244  docker cp  aa.txt    ashuc22:/
+  245  docker exec -it  ashuc22 sh 
+
+```
