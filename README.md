@@ -225,3 +225,68 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 
 
 ```
+
+## starting container 
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ docker  start  ashuc1
+ashuc1
+
+[ec2-user@ip-172-31-15-194 ~]$ docker  ps  
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+0396a2d549ed        alpine:latest       "ping fb.com"       4 minutes ago       Up 5 seconds                            ashuc1
+
+```
+
+## checkout output of contaier parent process
+
+```
+ 50  docker  logs   ashuc1  
+   51  docker  logs   -f  ashuc1 
+ ```
+ 
+ ## child process in container a running container 
+ 
+ ```
+ [ec2-user@ip-172-31-15-194 ~]$ docker  exec  ashuc1  ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8): 56 data bytes
+64 bytes from 8.8.8.8: seq=0 ttl=110 time=2.491 ms
+64 bytes from 8.8.8.8: seq=1 ttl=110 time=2.586 ms
+64 bytes from 8.8.8.8: seq=2 ttl=110 time=2.525 ms
+64 bytes from 8.8.8.8: seq=3 ttl=110 time=2.597 ms
+64 bytes from 8.8.8.8: seq=4 ttl=110 time=2.516 ms
+64 bytes from 8.8.8.8: seq=5 ttl=110 time=2.496 ms
+64 bytes from 8.8.8.8: seq=6 ttl=110 time=2.549 ms
+64 bytes from 8.8.8.8: seq=7 ttl=110 time=2.486 ms
+64 bytes from 8.8.8.8: seq=8 ttl=110 time=2.476 ms
+64 bytes from 8.8.8.8: seq=9 ttl=110 time=2.700 ms
+64 bytes from 8.8.8.8: seq=10 ttl=110 time=2.470 ms
+64 bytes from 8.8.8.8: seq=11 ttl=110 time=2.546 ms
+64 bytes from 8.8.8.8: seq=12 ttl=110 time=2.549 ms
+^C
+[ec2-user@ip-172-31-15-194 ~]$ docker  ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+0396a2d549ed        alpine:latest       "ping fb.com"       17 minutes ago      Up 9 minutes                            ashuc1
+[ec2-user@ip-172-31-15-194 ~]$ docker  exec  -d  ashuc1  ping 8.8.8.8
+[ec2-user@ip-172-31-15-194 ~]$ docker  ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+0396a2d549ed        alpine:latest       "ping fb.com"       17 minutes ago      Up 9 minutes 
+```
+
+## accessing container shell
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ docker  exec -it ashuc1  sh 
+/ # uname 
+Linux
+/ # uname -r
+4.14.209-160.339.amzn2.x86_64
+/ # cat  /etc/os-release 
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.12.3
+PRETTY_NAME="Alpine Linux v3.12"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://bugs.alpinelinux.org/"
+
+```
