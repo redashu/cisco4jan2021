@@ -156,3 +156,72 @@ Server:
    ```
    
    
+## pulling docker images from docker hub 
+
+```
+ 25  docker pull java 
+   26  docker pull  python 
+   27  docker pull  tomcat 
+   28  history 
+[ec2-user@ip-172-31-15-194 ~]$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+tomcat              latest              feba8d001e3f        2 weeks ago         649MB
+python              latest              d1eef6fb8dbe        2 weeks ago         885MB
+java                latest              d23bdf5b1b1b        3 years ago         643MB
+
+```
+## Docker internal configuration 
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ cd /var/lib/docker/
+[ec2-user@ip-172-31-15-194 docker]$ ls
+ls: cannot open directory .: Permission denied
+[ec2-user@ip-172-31-15-194 docker]$ sudo -i
+[root@ip-172-31-15-194 ~]# cd /var/lib/docker/
+[root@ip-172-31-15-194 docker]# ls
+builder  buildkit  containers  image  network  overlay2  plugins  runtimes  swarm  tmp  trust  volumes
+[root@ip-172-31-15-194 docker]# 
+
+```
+## Docker client options 
+
+<img src="dcli.png">
+
+# first container 
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ docker   run  --name ashuc1  alpine:latest  ping fb.com 
+PING fb.com (157.240.16.35): 56 data bytes
+64 bytes from 157.240.16.35: seq=0 ttl=49 time=1.156 ms
+64 bytes from 157.240.16.35: seq=1 ttl=49 time=1.153 ms
+64 bytes from 157.240.16.35: seq=2 ttl=49 time=1.845 ms
+64 bytes from 157.240.16.35: seq=3 ttl=49 time=1.263 ms
+64 bytes from 157.240.16.35: seq=4 ttl=49 time=1.198 ms
+64 bytes from 157.240.16.35: seq=5 ttl=49 time=1.141 ms
+64 bytes from 157.240.16.35: seq=6 ttl=49 time=1.237 ms
+64 bytes from 157.240.16.35: seq=7 ttl=49 time=1.289 ms
+64 bytes from 157.240.16.35: seq=8 ttl=49 time=1.144 ms
+64 bytes from 157.240.16.35: seq=9 ttl=49 time=1.190 ms
+64 bytes from 157.240.16.35: seq=10 ttl=49 time=1.197 ms
+64 bytes from 157.240.16.35: seq=11 ttl=49 time=1.176 ms
+64 bytes from 157.240.16.35: seq=12 ttl=49 time=1.240 ms
+64 bytes from 157.240.16.35: seq=13 ttl=49 time=1.174 ms
+64 bytes from 157.240.16.35: seq=14 ttl=49 time=1.275 ms
+^C
+--- fb.com ping statistics ---
+15 packets transmitted, 15 packets received, 0% packet loss
+round-trip min/avg/max = 1.141/1.245/1.845 ms
+
+```
+## checking container status
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ docker   ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[ec2-user@ip-172-31-15-194 ~]$ 
+[ec2-user@ip-172-31-15-194 ~]$ docker   ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                          PORTS               NAMES
+0396a2d549ed        alpine:latest       "ping fb.com"       2 minutes ago       Exited (0) About a minute ago                       ashuc1
+
+
+```
