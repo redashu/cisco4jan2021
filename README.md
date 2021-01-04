@@ -108,3 +108,51 @@ Last login: Mon Jan  4 05:39:02 2021 from 103.22.142.170
 
 
 ```
+
+## now checking 
+
+```
+ec2-user@ip-172-31-15-194 ~]$ docker version 
+Client:
+ Version:           19.03.13-ce
+ API version:       1.40
+ Go version:        go1.13.15
+ Git commit:        4484c46
+ Built:             Mon Oct 12 18:51:20 2020
+ OS/Arch:           linux/amd64
+ Experimental:      false
+
+Server:
+ Engine:
+  Version:          19.03.13-ce
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.13.15
+  Git commit:       4484c46
+  Built:            Mon Oct 12 18:51:50 2020
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.4.1
+  GitCommit:        c623d1b36f09f8ef6536a057bd658b3aa8632828
+ runc:
+  Version:          1.0.0-rc92
+  GitCommit:        ff819c7e9184c13b7c2607fe6c30ae19403a7aff
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+
+```
+
+## searching images on docker hub 
+
+```
+17  docker  images
+   18  docker search python 
+   19  docker search  java
+   20  history 
+   21  docker search  dockerashu
+   22  docker search  ashutoshh 
+   
+   ```
+   
+   
