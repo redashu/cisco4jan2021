@@ -311,3 +311,71 @@ while 4 > 2 :
     print("current time and date is",cont)
     
 ```
+
+
+## converting into docker image 
+
+## dockerfile
+
+```
+[ec2-user@ip-172-31-15-194 pythonapp]$ cat Dockerfile 
+FROM python 
+#  using some base image 
+MAINTAINER  ashutoshh@linux.com
+# optional but good 
+RUN mkdir  /mycode 
+COPY  ashu.py  /mycode/ashu.py
+#  make sure dockerfile & code like ashu.py are at same location 
+# only current location things gonna used in copy instructions 
+WORKDIR  /mycode
+#  like cd in linux 
+# to change directory during build time of docker image 
+RUN chmod +x ashu.py
+# to run any command 
+CMD  ["python","ashu.py"]
+
+# only CMD can be the one to define the default parent process 
+#  this is used for deciding the default parent process
+
+```
+
+## building docker images
+
+```
+ec2-user@ip-172-31-15-194 pythonapp]$ docker build  -t   python:ashucode   . 
+Sending build context to Docker daemon  3.584kB
+Step 1/7 : FROM python
+ ---> d1eef6fb8dbe
+Step 2/7 : MAINTAINER  ashutoshh@linux.com
+ ---> Running in 121bbc70b0e2
+Removing intermediate container 121bbc70b0e2
+ ---> f3b2dc828f06
+Step 3/7 : RUN mkdir  /mycode
+ ---> Running in 45bfa003bf02
+Removing intermediate container 45bfa003bf02
+ ---> 8bbb968b6331
+Step 4/7 : COPY  ashu.py  /mycode/ashu.py
+ ---> 4dc81c32bc75
+Step 5/7 : WORKDIR  /mycode
+ ---> Running in 810d21cb6da9
+Removing intermediate container 810d21cb6da9
+ ---> b7fda4deea24
+Step 6/7 : RUN chmod +x ashu.py
+ ---> Running in ab3cb53a17cd
+Removing intermediate container ab3cb53a17cd
+ ---> 34863daa425b
+Step 7/7 : CMD  ["python","ashu.py"]
+ ---> Running in 1d67821ae0bb
+Removing intermediate container 1d67821ae0bb
+ ---> b89e1e70e49c
+Successfully built b89e1e70e49c
+Successfully tagged python:ashucode
+[ec2-user@ip-172-31-15-194 pythonapp]$ docker  images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+python              ashucode            b89e1e70e49c        12 seconds ago      885MB
+busybox             latest              a77dce18d0ec        5 days ago          1.24MB
+tomcat              latest              feba8d001e3f        2 weeks ago         649MB
+
+```
+
+
