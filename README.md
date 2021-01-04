@@ -522,3 +522,28 @@ create two containers and do the given things
   245  docker exec -it  ashuc22 sh 
 
 ```
+
+# namespace in docker container 
+
+<img src="ns.png">
+
+## cgroups 
+
+```
+$ docker  run -d --name xc11 --memory 100m  --cpu-shares=30  alpine ping fb.com 
+
+```
+## update cgroup
+
+```
+262  docker  run -d --name xc11 --memory 100m alpine ping fb.com 
+  263  docker stats
+  264  docker update xc11 --memory 500m 
+  265  docker update xc11 --help
+  266  docker update xc11 --memory-swap 500m 
+  267  docker stats
+  268  docker update xc11 --memory 500m 
+  
+  ```
+  
+  
