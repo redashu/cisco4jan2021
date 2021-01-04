@@ -378,4 +378,124 @@ tomcat              latest              feba8d001e3f        2 weeks ago         
 
 ```
 
+## Dockerfile build operation 
+
+## systemctl & systemd  concept in container
+
+<img src="systemd.png">
+
+## webapp with httpd server 
+
+### Dockerfile 
+
+```
+cat ashu.dockerfile 
+FROM centos
+MAINTAINER  ashutoshh@linux.com ,9509957594
+RUN yum install httpd -y
+WORKDIR  /var/www/html/
+#  /var/www/html/ is the place from where httpd can read the web app 
+COPY app  .  
+EXPOSE 80
+CMD ["httpd","-D","FOREGROUND"]
+# systemctl is calling a script to start any process 
+
+```
+
+### .dockerignore 
+
+```
+[ec2-user@ip-172-31-15-194 webapp1]$ cat .dockerignore 
+ashu.dockerfile
+app/.git
+app/*.md
+app/LICENSE 
+.dockerignore
+
+```
+
+## building image 
+
+```
+[ec2-user@ip-172-31-15-194 webapp1]$ docker  build  -t   htmlwebapp:ashuv0011  -f  ashu.dockerfile   . 
+Sending build context to Docker daemon     64kB
+Step 1/7 : FROM centos
+latest: Pulling from library/centos
+7a0437f04f83: Pull complete 
+Digest: sha256:5528e8b1b1719d34604c87e11dcd1c0a20bedf46e83b5632cdeac91b8c04efc1
+Status: Downloaded newer image for centos:latest
+ ---> 300e315adb2f
+Step 2/7 : MAINTAINER  ashutoshh@linux.com ,9509957594
+ ---> Running in 221a238cff57
+Removing intermediate container 221a238cff57
+
+
+```
+## creating container 
+
+```
+[ec2-user@ip-172-31-15-194 webapp1]$ docker run --name  app11    -d  -p  1122:80    766e926aba65  
+c62ddeae5f6415fb04dbcb73e91c2baf832154bf6cbd35a25877e12f27f45675
+[ec2-user@ip-172-31-15-194 webapp1]$ docker ps 
+CONTAINER ID        IMAGE               COMMAND                 CREATED             STATUS              PORTS                  NAMES
+c62ddeae5f64        766e926aba65        "httpd -D FOREGROUND"   6 seconds ago       Up 5 seconds        0.0.0.0:1122->80/tcp   app11
+879892dea998        python:ashucode     "python ashu.py"        2 hours ago         Up 2 hours                             
+
+```
+## dockerfile with entrypoint process
+
+```
+[ec2-user@ip-172-31-15-194 webapp1]$ cat  ashu.dockerfile 
+FROM centos
+MAINTAINER  ashutoshh@linux.com ,9509957594
+RUN yum install httpd -y
+WORKDIR  /var/www/html/
+#  /var/www/html/ is the place from where httpd can read the web app 
+COPY app  .  
+EXPOSE 80
+ENTRYPOINT httpd  -DFOREGROUND
+# systemctl is calling a script to start any process 
+
+```
+
+## image build without using previoud build cache 
+
+```
+docker  build  -t   htmlwebapp:ashuv0022  -f  ashu.dockerfile --no-cache   .
+
+```
+## CMD & ENTrypoint all together
+
+```
+[ec2-user@ip-172-31-15-194 pythonapp]$ cat Dockerfile 
+FROM python 
+#  using some base image 
+MAINTAINER  ashutoshh@linux.com
+# optional but good 
+RUN mkdir  /mycode 
+COPY  ashu.py  /mycode/ashu.py
+COPY  cisco.py  /mycode/cisco.py
+#  make sure dockerfile & code like ashu.py are at same location 
+# only current location things gonna used in copy instructions 
+WORKDIR  /mycode
+#  like cd in linux 
+# to change directory during build time of docker image 
+RUN chmod +x ashu.py cisco.py 
+# to run any command 
+ENTRYPOINT  ["python"]
+# is fixed 
+CMD  ["ashu.py"]
+# dynamic 
+
+# only CMD can be the one to define the default parent process 
+#  this is used for deciding the default parent process
+
+```
+
+
+## replacing entrypoint based parent process
+
+```
+docker run -d --name x4 -it  --entrypoint ping  python:v1122 google.com
+```
 
