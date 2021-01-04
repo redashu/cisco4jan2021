@@ -290,3 +290,24 @@ HOME_URL="https://alpinelinux.org/"
 BUG_REPORT_URL="https://bugs.alpinelinux.org/"
 
 ```
+
+# Containerization of applications 
+
+<img src="capp.png">
+
+## python script with dockerfile 
+
+```
+[ec2-user@ip-172-31-15-194 pythonapp]$ cat ashu.py 
+import  subprocess
+import time 
+k=subprocess.getoutput('uname -r')
+cont=subprocess.getoutput('date')
+
+while 4 > 2 :
+    print("Hello world")
+    print("docker is running in kernel version ",k)
+    time.sleep(2)
+    print("current time and date is",cont)
+    
+```
