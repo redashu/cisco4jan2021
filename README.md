@@ -26,3 +26,85 @@
 [docker desktop] ('https://hub.docker.com/editions/community/docker-ce-desktop-mac')
 
 
+# INstalling Docker in Linux server 
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ sudo yum  install  docker 
+Failed to set locale, defaulting to C
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+amzn2-core                                                         | 3.7 kB  00:00:00     
+Resolving Dependencies
+--> Running transaction check
+---> Package docker.x86_64 0:19.03.13ce-1.amzn2 will be installed
+--> Processing Dependency: runc >= 1.0.0 for package: docker-19.03.13ce-1.amzn2.x86_64
+--> Processing Dependency: containerd >= 1.3.2 for package: docker-19.03.13ce-1.amzn2.x86_64
+--> Processing Dependency: pigz for package: docker-19.03.13ce-1.amzn2.x86_64
+--> Processing Dependency: libcgroup for package: docker-19.03.13ce-1.amzn2.x86_64
+--> Running transaction check
+
+```
+
+## checking installation 
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ docker  version 
+Client:
+ Version:           19.03.13-ce
+ API version:       1.40
+ Go version:        go1.13.15
+ Git commit:        4484c46
+ Built:             Mon Oct 12 18:51:20 2020
+ OS/Arch:           linux/amd64
+ Experimental:      false
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+```
+
+## starting docker engine 
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ sudo systemctl start docker 
+[ec2-user@ip-172-31-15-194 ~]$ sudo systemctl enable  docker 
+Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
+
+```
+
+## starting 
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ sudo systemctl status  docker 
+● docker.service - Docker Application Container Engine
+   Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor preset: disabled)
+   Active: active (running) since Mon 2021-01-04 06:08:12 UTC; 52s ago
+     Docs: https://docs.docker.com
+ Main PID: 3958 (dockerd)
+   CGroup: /system.slice/docker.ser
+   
+ ```
+ 
+ ## Connecting to Docker engine 
+ 
+ ```
+ [ec2-user@ip-172-31-15-194 ~]$ docker version 
+Client:
+ Version:           19.03.13-ce
+ API version:       1.40
+ Go version:        go1.13.15
+ Git commit:        4484c46
+ Built:             Mon Oct 12 18:51:20 2020
+ OS/Arch:           linux/amd64
+ Experimental:      false
+Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get http://%2Fvar%2Frun%2Fdocker.sock/v1.40/version: dial unix /var/run/docker.sock: connect: permission denied
+
+```
+
+## adding non root user to Docker group 
+
+```
+[ec2-user@ip-172-31-15-194 ~]$ sudo usermod -a -G docker ec2-user 
+[ec2-user@ip-172-31-15-194 ~]$ logout
+Connection to 35.154.0.70 closed.
+❯ ssh -i Downloads/cisco.pem ec2-user@35.154.0.70
+Last login: Mon Jan  4 05:39:02 2021 from 103.22.142.170
+
+
+```
