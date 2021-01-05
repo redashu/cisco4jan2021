@@ -162,3 +162,154 @@ docker0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 
 <img src="nat.png">
 
+
+# Bridges
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+49019c7e83f0        bridge              bridge              local
+6e677e6a1756        host                host                local
+ed6ede4cc0ec        none                null                local
+```
+
+## Inspecting bridge 
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ docker  network inspect  bridge 
+[
+    {
+        "Name": "bridge",
+        "Id": "49019c7e83f0ceff32e925d99bb088fc2d857f609d25b05ba119997cbe062812",
+        "Created": "2021-01-05T04:09:46.251154981Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16"
+                }
+            ]
+
+```
+
+## None bridge 
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ docker run -it --rm  --network none  alpine sh 
+/ # ifconfig 
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+/ # ping google.com
+
+```
+
+## Host bridge
+
+<img src="hostbr.png">
+
+## remove all containers
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ docker rm $(docker ps -aq) -f
+afb0669a25e0
+b3ec8c41502a
+4bd1bee63225
+66395cde4c59
+700b0387b04a
+
+```
+
+## custom bridge 
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ docker network create  ashubr1
+88bb7324bebc1cd471d55df98b2aa7b9d3eacad14120d44ac7a20b56824e28ac
+[ec2-user@ip-172-31-6-16 ~]$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+88bb7324bebc        ashubr1             bridge              local
+49019c7e83f0        bridge              bridge              local
+6e677e6a1756        host                host                local
+ed6ede4cc0ec        none                null                local
+[ec2-user@ip-172-31-6-16 ~]$ docker network inspect ashubr1
+[
+    {
+        "Name": "ashubr1",
+        "Id": "88bb7324bebc1cd471d55df98b2aa7b9d3eacad14120d44ac7a20b56824e28ac",
+        "Created": "2021-01-05T06:39:06.24444529Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+
+```
+
+## custom bridge with subnet 
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ docker network create  ashubr2  --subnet  192.168.1.0/24  
+435b166454092476d8ea71b3e2cfd8f7d39369297abb82ffc24ed8994bf86d21
+[ec2-user@ip-172-31-6-16 ~]$ docker network inspect ashubr2
+[
+    {
+        "Name": "ashubr2",
+        "Id": "435b166454092476d8ea71b3e2cfd8f7d39369297abb82ffc24ed8994bf86d21",
+        "Created": "2021-01-05T06:40:09.849638743Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "192.168.1.0/24"
+                }
+            ]
+
+```
+
+## more steps to custom bridge
+
+```
+100  docker network ls
+  101  docker network create  ashubr1
+  102  docker network ls
+  103  docker network inspect ashubr1
+  104  history 
+  105  docker network create  ashubr2  --subnet  192.168.1.0/24  
+  106  docker network inspect ashubr2
+  107  history 
+  108  docker network ls
+  109  docker run -itd --name x1 --network ashubr1 alpine ping fb.com 
+  110  docker run -itd --name x2 --network ashubr1 alpine ping google.com 
+  111  docker  ps
+  112  docker exec -it x1 sh 
+  113  history 
+  114  docker run -itd --name x3 --network ashubr2 alpine ping google.com 
+  115  docker  ps
+  116  docker exec -it x3 sh 
+  117  history 
+  118  docker run -itd --name x4 --network ashubr2  --ip 192.168.1.100   alpine ping google.com 
+  119  docker ps
+  120  docker exec -it x4 sh 
+
+```
