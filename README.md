@@ -110,3 +110,55 @@ httpv1: digest: sha256:79bf0bdcaec740853881f33d3a41214470315d7a1ee72c218468bf6b4
 
 ```
 
+# Docker networking 
+
+## default docker bridge 
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ ifconfig  docker0
+docker0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+        inet6 fe80::42:6cff:fedb:162  prefixlen 64  scopeid 0x20<link>
+        ether 02:42:6c:db:01:62  txqueuelen 0  (Ethernet)
+        RX packets 9961  bytes 5572858 (5.3 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 9354  bytes 1327543 (1.2 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        
+   ```
+   
+   
+   ## docker0 bridge
+   
+   <img src="docker0.png">
+   
+   ## checking ip of container 
+   
+   ```
+   docker inspect x1
+   ===
+         "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "NetworkID": "49019c7e83f0ceff32e925d99bb088fc2d857f609d25b05ba119997cbe062812",
+                    "EndpointID": "c002e27d6a0aeea09903069adc13adab9a0a6ca00c9c1e7a995e96fb835fd693",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:11:00:02",
+                    "DriverOpts": null
+                }
+            }
+        }
+
+```
+
+## NAT 
+
+<img src="nat.png">
+
