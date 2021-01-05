@@ -313,3 +313,40 @@ ed6ede4cc0ec        none                null                local
   120  docker exec -it x4 sh 
 
 ```
+
+## connect 
+
+```
+/ # [ec2-user@ip-172-31-6-16 ~]$ docker network connect ashubr2 x1
+[ec2-user@ip-172-31-6-16 ~]$ docker exec -it x1 sh 
+/ # ifconfig 
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:12:00:02  
+          inet addr:172.18.0.2  Bcast:172.18.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:613 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:594 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:57770 (56.4 KiB)  TX bytes:56188 (54.8 KiB)
+
+eth1      Link encap:Ethernet  HWaddr 02:42:C0:A8:01:03  
+          inet addr:192.168.1.3  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:6 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:516 (516.0 B)  TX bytes:0 (0.0 B)
+
+
+```
+
+
+# Docker bridge drivers
+
+<img src="drivers.png">
+
+## macvlan link
+
+[docker] ('https://docs.docker.com/network/macvlan/')
+
+<img src="mac.png">
+
