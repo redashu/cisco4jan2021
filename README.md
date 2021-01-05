@@ -419,3 +419,51 @@ DAEMON_PIDFILE_TIMEOUT=10
  ```
  
  
+## transfer / sync images
+
+```
+rsync -avp  /var/lib/docker/   /myprivate/
+```
+
+## volume storage
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ docker volume  inspect  ashuvol11
+[
+    {
+        "CreatedAt": "2021-01-05T10:17:45Z",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/myprivate/volumes/ashuvol11/_data",
+        "Name": "ashuvol11",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+```
+
+# Compose 
+
+<img src="compose.png">
+
+## install compose 
+
+```
+[ec2-user@ip-172-31-6-16 data]$ sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   651  100   651    0     0  28304      0 --:--:-- --:--:-- --:--:-- 28304
+100 11.6M  100 11.6M    0     0  3498k      0  0:00:03  0:00:03 --:--:-- 3735k
+[ec2-user@ip-172-31-6-16 data]$ sudo chmod +x /usr/local/bin/docker-compose
+[ec2-user@ip-172-31-6-16 data]$ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+[ec2-user@ip-172-31-6-16 data]$ 
+[ec2-user@ip-172-31-6-16 data]$ docker-compose  -v
+docker-compose version 1.27.4, build 40524192
+
+```
+
+## docker context for multi env 
+
+[link] ('https://www.docker.com/blog/how-to-deploy-on-remote-docker-hosts-with-docker-compose/')
+
