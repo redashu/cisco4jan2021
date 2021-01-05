@@ -350,3 +350,72 @@ eth1      Link encap:Ethernet  HWaddr 02:42:C0:A8:01:03
 
 <img src="mac.png">
 
+
+# Storage in Docker
+
+## storage in docker
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ sudo mkdir  /myprivate
+[ec2-user@ip-172-31-6-16 ~]$ 
+[ec2-user@ip-172-31-6-16 ~]$ ls  /myprivate/
+[ec2-user@ip-172-31-6-16 ~]$ lsblk 
+NAME    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+xvda    202:0    0   30G  0 disk 
+`-xvda1 202:1    0   30G  0 part /
+xvdf    202:80   0  100G  0 disk 
+[ec2-user@ip-172-31-6-16 ~]$ sudo mkfs.xfs  /dev/xvdf 
+meta-data=/dev/xvdf              isize=512    agcount=4, agsize=6553600 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=0
+data     =                       bsize=4096   blocks=26214400, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal log           bsize=4096   blocks=12800, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[ec2-user@ip-172-31-6-16 ~]$ sudo mount /dev/xvdf  /myprivate/
+[ec2-user@ip-172-31-6-16 ~]$ df -hT /myprivate/
+Filesystem     Type  Size  Used Avail Use% Mounted on
+/dev/xvdf      xfs   100G  135M  100G   1% /myprivate
+
+```
+
+## engine storage configuration 
+
+```
+[ec2-user@ip-172-31-6-16 ~]$ cd /etc/sysconfig/
+[ec2-user@ip-172-31-6-16 sysconfig]$ ls
+acpid       clock     docker          init        modules          nfs            rpc-rquotad  run-parts  sysstat.ioconf
+atd         console   docker-storage  irqbalance  netconsole       raid-check     rpcbind      selinux
+authconfig  cpupower  grub            keyboard    network          rdisc          rsyncd       sshd
+chronyd     crond     i18n            man-db      network-scripts  readonly-root  rsyslog      sysstat
+[ec2-user@ip-172-31-6-16 sysconfig]$ sudo vim docker
+[ec2-user@ip-172-31-6-16 sysconfig]$ cat docker
+# The max number of open files for the daemon itself, and all
+# running containers.  The default value of 1048576 mirrors the value
+# used by the systemd service unit.
+DAEMON_MAXFILES=1048576
+
+# Additional startup options for the Docker daemon, for example:
+# OPTIONS="--ip-forward=true --iptables=true"
+# By default we limit the number of open files per container
+OPTIONS="--default-ulimit nofile=1024:4096  -g /myprivate "
+
+# How many seconds the sysvinit script waits for the pidfile to appear
+# when starting the daemon.
+DAEMON_PIDFILE_TIMEOUT=10
+
+```
+
+###
+
+```
+[ec2-user@ip-172-31-6-16 sysconfig]$ sudo systemctl daemon-reload 
+[ec2-user@ip-172-31-6-16 sysconfig]$ sudo systemctl restart docker 
+[ec2-user@ip-172-31-6-16 sysconfig]$ docker info |  grep -i root
+ Docker Root Dir: /myprivate
+ 
+ ```
+ 
+ 
