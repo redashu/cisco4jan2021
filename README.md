@@ -213,3 +213,8 @@ commit: 9f1e482427589ff8451c4723b6ba53bb9742fbb1
 🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
 
 ```
+
+## Installation options
+
+<img src="methodinstall.png">
+
