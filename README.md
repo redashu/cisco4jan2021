@@ -148,3 +148,68 @@ services:
  docker-compose up --build  -d
  
  
+# Container Orchestration Tools 
+
+<img src="orch.png">
+
+## GOogle history with k8s
+
+<img src="k8shit.png">
+
+## just overview of k8s & client architecture 
+
+<img src="k8sL1.png">
+
+## k8s master componet explain 
+
+<img src="mastercomp.png">
+
+## Minion node 
+
+<img src="minion.png">
+
+## system binary 
+
+<img src="bin.png">
+
+# K8s cluster deployment 
+
+<img src="minikube.png">
+
+## Installing minikube 
+
+[minikube] ('https://minikube.sigs.k8s.io/docs/start/')
+
+## Installing minikube on Mac 
+
+```
+❯ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 54.8M  100 54.8M    0     0  6726k      0  0:00:08  0:00:08 --:--:-- 7957k
+❯ sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+Password:
+❯ minikube version
+minikube version: v1.16.0
+commit: 9f1e482427589ff8451c4723b6ba53bb9742fbb1
+
+```
+
+## deploy k8s cluster
+
+```
+❯ minikube start --driver=docker
+😄  minikube v1.16.0 on Darwin 11.1
+✨  Using the docker driver based on user configuration
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+🔥  Creating docker container (CPUs=2, Memory=1987MB) ...
+🐳  Preparing Kubernetes v1.20.0 on Docker 20.10.0 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔎  Verifying Kubernetes components...
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+```
