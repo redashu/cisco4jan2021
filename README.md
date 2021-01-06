@@ -385,3 +385,75 @@ root@ashupod-1:/# uname -r
 
 ```
 
+## deleting pOD
+
+```
+❯ kubectl  delete pod ashupod-1
+pod "ashupod-1" deleted
+❯ kubectl get  po
+NAME          READY   STATUS    RESTARTS   AGE
+chandrapod1   1/1     Running   0          25m
+sauravpod1    1/1     Running   0          26m
+surpod-1      1/1     Running   0          27m
+❯ kubectl  delete pod --all
+pod "chandrapod1" deleted
+pod "sauravpod1" deleted
+pod "surpod-1" deleted
+
+```
+
+# autogen of YAML for POD
+
+```
+ kubectl  run  ashupod2  --image=nginx --port 80 --dry-run=client -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod2
+  name: ashupod2
+spec:
+  containers:
+  - image: nginx
+    name: ashupod2
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
+
+## YAML based deployment 
+
+```
+❯ kubectl  run  ashupod2  --image=nginx --port 80 --dry-run=client -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod2
+  name: ashupod2
+spec:
+  containers:
+  - image: nginx
+    name: ashupod2
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+❯ kubectl  run  ashupod2  --image=nginx --port 80 --dry-run=client -o yaml  >ashupod2.yml
+❯ ls
+ashupod1.yaml ashupod2.yml
+❯ kubectl  apply -f  ashupod2.yml
+pod/ashupod2 created
+❯ kubectl get po
+NAME       READY   STATUS              RESTARTS   AGE
+ashupod2   0/1     ContainerCreating   0          4s
+
+```
