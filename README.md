@@ -218,3 +218,53 @@ commit: 9f1e482427589ff8451c4723b6ba53bb9742fbb1
 
 <img src="methodinstall.png">
 
+## Installing kubectl on Mac
+
+```
+❯ curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 44.0M  100 44.0M    0     0  5528k      0  0:00:08  0:00:08 --:--:-- 5747k
+❯ chmod +x ./kubectl
+❯ sudo mv ./kubectl /usr/local/bin/kubectl
+Password:
+❯ 
+❯ kubectl version --client
+Client Version: version.Info{Major:"1", Minor:"20", GitVersion:"v1.20.1", GitCommit:"c4d752765b3bbac2237bf87cf0b1c2e307844666", GitTreeState:"clean", BuildDate:"2020-12-18T12:09:25Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"darwin/amd64"}
+
+```
+
+## link of kubectl 
+
+[install]  ('https://kubernetes.io/docs/tasks/tools/install-kubectl/')
+
+
+## checking connection 
+
+====
+
+```
+❯ minikube status
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+timeToStop: Nonexistent
+
+❯ kubectl  cluster-info
+Kubernetes control plane is running at https://127.0.0.1:32780
+KubeDNS is running at https://127.0.0.1:32780/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+❯ 
+❯ 
+❯ kubectl  version
+Client Version: version.Info{Major:"1", Minor:"20", GitVersion:"v1.20.1", GitCommit:"c4d752765b3bbac2237bf87cf0b1c2e307844666", GitTreeState:"clean", BuildDate:"2020-12-18T12:09:25Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"darwin/amd64"}
+Server Version: version.Info{Major:"1", Minor:"20", GitVersion:"v1.20.0", GitCommit:"af46c47ce925f4c4ad5cc8d1fca46c7b77d13b38", GitTreeState:"clean", BuildDate:"2020-12-08T17:51:19Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"linux/amd64"}
+❯ kubectl  get  nodes
+NAME       STATUS   ROLES                  AGE    VERSION
+minikube   Ready    control-plane,master   132m   v1.20.0
+
+```
