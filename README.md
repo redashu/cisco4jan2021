@@ -457,3 +457,28 @@ NAME       READY   STATUS              RESTARTS   AGE
 ashupod2   0/1     ContainerCreating   0          4s
 
 ```
+# JSOn pod file 
+
+```
+kubectl  run  myapp  --image=dockerashu/ciscoweb:httpv1  --port 80 --dry-run=client -o json  >web.json
+
+```
+
+## accessing application using 
+
+```
+❯ kubectl  port-forward  myapp  8899:80
+Forwarding from 127.0.0.1:8899 -> 80
+Forwarding from [::1]:8899 -> 80
+
+```
+
+## access application problems with POD 
+
+<img src="access.png">
+
+
+## pod with Label concept 
+
+<img src="lab.png">
+
