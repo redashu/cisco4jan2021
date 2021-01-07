@@ -238,4 +238,127 @@ kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP          45s
 
 ```
 
+## expose RC to create service 
 
+```
+❯ kubectl get  rc
+NAME            DESIRED   CURRENT   READY   AGE
+ashurc-111      1         1         1       5m29s
+chandrarc-111   1         1         1       5m21s
+rag-rc          1         1         1       5m13s
+sauravrc-111    1         1         1       3m41s
+❯ kubectl  get  po
+NAME                  READY   STATUS    RESTARTS   AGE
+ashurc-111-zkxdq      1/1     Running   0          4m15s
+chandrarc-111-9knb9   1/1     Running   0          5m26s
+rag-rc-g76pd          1/1     Running   0          5m18s
+sauravrc-111-scdsg    1/1     Running   0          3m46s
+❯ 
+❯ kubectl expose rc  ashurc-111 --type NodePort --port 1234 --target-port 80 --name ashurcsvc1
+service/ashurcsvc1 exposed
+❯ kubectl get  svc
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+ashurcsvc1   NodePort    10.109.239.40   <none>        1234:32523/TCP   4s
+kubernetes   ClusterIP   10.96.0.1       <none>        443/TCP          14m
+
+```
+
+## scaling app 
+
+```
+❯ kubectl scale rc  ashurc-111  --replicas=4
+replicationcontroller/ashurc-111 scaled
+❯ kubectl  get  rc
+NAME            DESIRED   CURRENT   READY   AGE
+ashurc-111      4         4         2       15m
+chandrarc-111   1         1         1       15m
+rag-rc          1         1         1       15m
+sauravrc-111    1         1         1       13m
+❯ kubectl  get  rc
+NAME            DESIRED   CURRENT   READY   AGE
+ashurc-111      4         4         4       15m
+chandrarc-111   1         1         1       15m
+rag-rc          1         1         1       15m
+sauravrc-111    1         1         1       13m
+❯ kubectl  get  po
+NAME                  READY   STATUS    RESTARTS   AGE
+ashurc-111-h7pwg      1/1     Running   0          3m39s
+ashurc-111-mj572      1/1     Running   0          17s
+ashurc-111-pmcb8      1/1     Running   0          17s
+ashurc-111-zkxdq      1/1     Running   0          14m
+
+```
+
+# namespace 
+
+<img src="ns.png">
+
+## default namespaces
+
+```
+❯ kubectl  get  ns
+NAME              STATUS   AGE
+default           Active   22h
+kube-node-lease   Active   22h
+kube-public       Active   22h
+kube-system       Active   22h
+❯ kubectl  get  namespace
+NAME              STATUS   AGE
+default           Active   22h
+kube-node-lease   Active   22h
+kube-public       Active   22h
+kube-system       Active   22h
+
+
+```
+
+## kube-system namespace 
+
+```
+❯ kubectl  get  po   -n kube-system
+NAME                                       READY   STATUS    RESTARTS   AGE
+calico-kube-controllers-744cfdf676-nfqcc   1/1     Running   2          21h
+calico-node-5b6mh                          1/1     Running   14         21h
+calico-node-78ps9                          1/1     Running   2          21h
+calico-node-df45c                          1/1     Running   2          21h
+calico-node-xfk7t                          1/1     Running   2          21h
+coredns-74ff55c5b-dxsb5                    1/1     Running   2          23h
+coredns-74ff55c5b-sj4bs                    1/1     Running   2          23h
+etcd-k8smaster                             1/1     Running   2          23h
+kube-apiserver-k8smaster                   1/1     Running   2          23h
+kube-controller-manager-k8smaster          1/1     Running   2          23h
+kube-proxy-47knh                           1/1     Running   2          23h
+kube-proxy-67v5b                           1/1     Running   2          23h
+kube-proxy-jhtbj                           1/1     Running   2          23h
+kube-proxy-qnhqc                           1/1     Running   2          23h
+kube-scheduler-k8smaster                   1/1     Running   2          23h
+
+```
+
+##  creating namespace 
+
+```
+❯ kubectl  create  namespace  ashu-space
+namespace/ashu-space created
+❯ kubectl  get  ns
+NAME              STATUS   AGE
+ashu-space        Active   3s
+default           Active   23h
+kube-node-lease   Active   23h
+kube-public       Active   23h
+kube-system       Active   23h
+
+```
+
+## define namespace in YAML file 
+
+```
+piVersion: v1
+kind: ReplicationController
+metadata:
+ namespace: ashu-space # name of existing namespace 
+ name: ashurc-111  # name of Replication controller (RC)
+ labels:  # label of RC 
+ 
+ ```
+ 
