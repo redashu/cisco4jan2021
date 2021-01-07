@@ -362,3 +362,18 @@ metadata:
  
  ```
  
+## service 
+
+```
+❯ kubectl  get  rc -n ashu-space
+NAME         DESIRED   CURRENT   READY   AGE
+ashurc-111   2         2         2       2m45s
+❯ 
+❯ kubectl expose rc  ashurc-111 --type NodePort --port 1234 --target-port 80 --name mysvc1 -n ashu-space
+service/mysvc1 exposed
+❯ kubectl get svc -n ashu-space
+NAME     TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+mysvc1   NodePort   10.110.189.82   <none>        1234:32237/TCP   7s
+
+```
+
