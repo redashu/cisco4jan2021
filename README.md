@@ -509,3 +509,55 @@ mysvc1   NodePort   10.110.189.82   <none>        1234:32237/TCP   35m
  3403  kubectl get deploy -n ashu-space 
 
 ```
+
+
+## Explore deployment 
+
+```
+❯ kubectl scale deployment ashujavadep1  --replicas=3 -n ashu-space
+deployment.apps/ashujavadep1 scaled
+❯ 
+❯ kubectl  get  deploy -n ashu-space
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+ashujavadep1   3/3     3            3           3m5s
+
+```
+
+## checking revision number 
+
+```
+❯ kubectl  describe deployment ashujavadep1  -n ashu-space
+Name:                   ashujavadep1
+Namespace:              ashu-space
+CreationTimestamp:      Thu, 07 Jan 2021 14:28:21 +0530
+Labels:                 app=ashujavadep1
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=ashujavadep1
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=ashujavadep1
+  Containers:
+
+
+```
+
+## image update in k8s deployment 
+
+```
+❯ kubectl set  image  deployment    ashujavadep1  ciscojava=dockerashu/ciscojava:v010 -n ashu-space
+deployment.apps/ashujavadep1 image updated
+
+
+```
+
+```
+❯ kubectl rollout history deployment ashujavadep1  -n ashu-space
+deployment.apps/ashujavadep1 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+
+```
