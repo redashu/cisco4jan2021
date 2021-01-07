@@ -570,3 +570,57 @@ REVISION  CHANGE-CAUSE
  
  ```
  
+ # Private registry based image deployment 
+ 
+ ## ACR azure container registry 
+ 
+ ```
+ 3490  docker pull alpine 
+ 3491  docker  images 
+ 3492  docker  tag  alpine:latest  ciscoindia.azurecr.io/alpine:v1  
+ 3493  docker images
+ 3494  docker  login  ciscoindia.azurecr.io 
+ 3495  docker  push  ciscoindia.azurecr.io/alpine:v1  
+ 3496  docker  logout   ciscoindia.azurecr.io 
+ 
+ ```
+ 
+ ## alpine POD 
+ 
+ ```
+ ❯ cat secpod.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod9
+  name: ashupod9
+  namespace: ashu-space 
+spec:
+  containers:
+  - image: ciscoindia.azurecr.io/alpine:v1
+    name: ashupod9
+    command: ["/bin/sh","-c","ping google.com"]  # if your parent process is maitainer by entrypoint then 
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  
+  ```
+  
+ # Secret in k8s
+ 
+ ```
+ 3511  kubectl  create secret  docker-registry  ashuimgcred  --docker-server=ciscoindia.azurecr.io  --docker-username=ciscoindia  --docker-password=hlKzA9YLm/2/DHVKfl8oWjMNbXA0Xf01  -n ashu-space  
+❯ kubectl get secret -n ashu-space
+NAME                  TYPE                                  DATA   AGE
+ashuimgcred           kubernetes.io/dockerconfigjson        1      23s
+default-token-9ngzx   kubernetes.io/service-account-token   3      3h21m
+
+```
+
+# volume in k8s
+
+<img src="volume.png">
+
+
