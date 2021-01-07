@@ -561,3 +561,12 @@ REVISION  CHANGE-CAUSE
 2         <none>
 
 ```
+
+## rollback 
+
+```
+ 3483  kubectl rollout undo  deploy ashujavadep1   --to-revision=1  -n ashu-space 
+ 3484  kubectl rollout status  deploy ashujavadep1  -n ashu-space 
+ 
+ ```
+ 
