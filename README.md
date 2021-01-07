@@ -90,6 +90,8 @@ status:
   
  ## service with updated selector label
  
+ <img src="selector.png">
+ 
  ```
  ❯ cat  mysvc1.yml
 apiVersion: v1
