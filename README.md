@@ -34,6 +34,91 @@ spec:
   
   ## checking labels and ip of PODs
   
+  ## Deleting pod and service
+  
+  ```
+  ❯ kubectl delete all --all
+pod "ashujavaapp" deleted
+pod "chandrajavaapp" deleted
+pod "raithaljavaapp" deleted
+pod "sauravjavaapp" deleted
+pod "surabhijavaapp" deleted
+service "ashusvc11" deleted
+service "chandrasvc1" deleted
+service "kubernetes" deleted
+service "raithasvc1" deleted
+
+
+```
+
+# Replication controller 
+
+<img src="rc.png">
+
+## replication controller
+
+```
+❯ cat ashu-rc1.yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+ name: ashurc-111
+ labels:
+  x: helloashu
+
+spec:
+ replicas: 1  # no of pod 
+ template:
+  metadata:
+   labels:
+    app: ashuapp1
+  spec:
+   containers:
+   - image: nginx
+     name: ashuc1
+     ports:
+     - containerPort: 80
+     
+```
+
+## deployment of RC
+
+```
+❯ cat ashu-rc1.yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+ name: ashurc-111
+ labels:
+  x: helloashu
+
+spec:
+ replicas: 1  # no of pod 
+ template:
+  metadata:
+   labels:
+    app: ashuapp1
+  spec:
+   containers:
+   - image: nginx
+     name: ashuc1
+     ports:
+     - containerPort: 80
+❯ vim ashu-rc1.yaml
+❯ kubectl apply -f  ashu-rc1.yaml
+replicationcontroller/ashurc-111 created
+❯ kubectl  get  rc
+NAME         DESIRED   CURRENT   READY   AGE
+ashurc-111   1         1         1       5s
+❯ kubectl  get  po
+NAME                  READY   STATUS    RESTARTS   AGE
+ashurc-111-c24xw      1/1     Running   0          32s
+chandrarc-111-9knb9   1/1     Running   0          24s
+rag-rc-g76pd          1/1     Running   0          16s
+
+```
+
+  
   ```
   ❯ kubectl get po --show-labels
 NAME             READY   STATUS    RESTARTS   AGE     LABELS
