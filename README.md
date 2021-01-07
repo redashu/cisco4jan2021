@@ -200,8 +200,6 @@ status:
   
  ```
   
-
-
 ## automatically match label of pod during service creation time 
 
 ```
@@ -221,6 +219,9 @@ ashusvc11    NodePort    10.111.230.121   <none>        1234:30140/TCP   9s
 kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP          45s
 
 ```
+
+
+
 
 # RC 
 
