@@ -222,4 +222,19 @@ kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP          45s
 
 ```
 
-## hello
+# RC 
+
+```
+
+3304  kubectl apply -f  ashu-rc1.yaml
+ 3305  kubectl  get  rc
+ 3306  kubectl  get  po
+ 3307  kubectl get  rc
+ 3308  kubectl get  pod 
+ 3309  kubectl delete pod ashurc-111-c24xw
+ 3310  kubectl get  pod 
+
+
+```
+
+
