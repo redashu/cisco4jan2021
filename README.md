@@ -1,1 +1,5 @@
-# cisco4jan2021
+# service and pods in kubernetes 
+
+<img src="podsvc.png">
+
+
