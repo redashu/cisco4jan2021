@@ -117,3 +117,23 @@ status:
   
 
 
+## automatically match label of pod during service creation time 
+
+```
+❯ kubectl  expose pod ashujavaapp  --type NodePort --port 1234 --target-port 8080 --name ashusvc11
+service/ashusvc11 exposed
+❯ 
+❯ kubectl  get  po
+NAME             READY   STATUS    RESTARTS   AGE
+ashujavaapp      1/1     Running   0          71m
+chandrajavaapp   1/1     Running   0          70m
+raithaljavaapp   1/1     Running   0          70m
+sauravjavaapp    1/1     Running   0          70m
+surabhijavaapp   1/1     Running   0          67m
+❯ kubectl  get  svc
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+ashusvc11    NodePort    10.111.230.121   <none>        1234:30140/TCP   9s
+kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP          45s
+
+```
+
