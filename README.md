@@ -377,3 +377,135 @@ mysvc1   NodePort   10.110.189.82   <none>        1234:32237/TCP   7s
 
 ```
 
+# Deployment in Picture 
+
+<img src="deployment.png">
+
+## reality of deployment
+
+<img src="deprel.png">
+
+# Deployment 
+
+```
+❯ kubectl  create  deployment  ashujavadep1  --image=dockerashu/ciscojava:v009 --namespace ashu-space  --dry-run=client -o yaml >ashudep1.yml
+❯ cat  ashudep1.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashujavadep1
+  name: ashujavadep1
+  namespace: ashu-space
+spec:
+  replicas: 1
+
+```
+
+## appending service yaml in the same file 
+
+```
+kubectl  create  service  nodeport ashusvc2 --tcp 1100:8080  --namespace ashu-space --dry-run=client -o yaml  >>ashudep1.yml
+```
+
+## merging yaml in single file 
+
+```
+❯ cat ashudep1.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashujavadep1
+  name: ashujavadep1
+  namespace: ashu-space
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashujavadep1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashujavadep1  # label of POD 
+    spec:
+      containers:
+      - image: dockerashu/ciscojava:v009
+        name: ciscojava
+        resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashusvc2
+  name: ashusvc2
+spec:
+  ports:
+  - name: 1100-8080
+    port: 1100
+    protocol: TCP
+    targetPort: 8080
+  selector:  # to find pod using label 
+   app: ashujavadep1  # label of POD 
+  type: NodePort
+status:
+  loadBalancer: {}
+  
+  ```
+  
+  ## checking 
+  
+  ```
+  ❯ kubectl  get deploy   -n ashu-space
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+ashujavadep1   1/1     1            1           34s
+❯ kubectl  get rs   -n ashu-space
+NAME                     DESIRED   CURRENT   READY   AGE
+ashujavadep1-78c86b65d   1         1         1       40s
+❯ kubectl  get po  -n ashu-space
+NAME                           READY   STATUS    RESTARTS   AGE
+ashujavadep1-78c86b65d-smp8w   1/1     Running   0          47s
+ashurc-111-gqv94               1/1     Running   0          38m
+ashurc-111-shnw2               1/1     Running   0          38m
+❯ kubectl  get svc  -n ashu-space
+NAME     TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+mysvc1   NodePort   10.110.189.82   <none>        1234:32237/TCP   35m
+
+```
+
+## history of deployment 
+
+```
+3382  kubectl  create  deployment  ashujavadep1  --image=dockerashu/ciscojava:v009  --dry-run=client -o yaml >ashudep1.yml
+ 3383  ls
+ 3384  kubectl  create  deployment  ashujavadep1  --image=dockerashu/ciscojava:v009 --namespace ashu-space  --dry-run=client -o yaml >ashudep1.yml
+ 3385  cat  ashudep1.yml
+ 3386  history
+ 3387  kubectl  create  service  nodeport ashusvc2 --tcp 1100:8080  --namespace ashu-space --dry-run=client -o yaml  >>ashudep1.yml 
+ 3388  ls
+ 3389  vim ashudep1.yml
+ 3390  cat ashudep1.yml
+ 3391  kubectl apply -f ashudep1.yml
+ 3392  kubectl  get deployment 
+ 3393  kubectl  get deployment   -n ashu-space 
+ 3394  kubectl  get svc    -n ashu-space 
+ 3395  kubectl  get deploy   -n ashu-space 
+ 3396  kubectl  get rs   -n ashu-space 
+ 3397  kubectl  get po  -n ashu-space 
+ 3398  kubectl  get svc  -n ashu-space 
+ 3399  history 
+ 3400  kubectl  get all -n ashu-space 
+ 3401  kubectl get deploy -n ashu-space 
+ 3402  kubectl scale deploy  ashujavadep1 --replicas=5  -n ashu-space 
+ 3403  kubectl get deploy -n ashu-space 
+
+```
