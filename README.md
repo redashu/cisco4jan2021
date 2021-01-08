@@ -116,5 +116,89 @@ Fri Jan  8 04:42:56 UTC 2021
 
 ```
 
+## Multi container POd 
+
+```
+❯ cat  emppod.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashuemppod
+    x: helloashu
+  name: ashuemppod
+  namespace: ashu-space
+spec:
+  nodeName: worker1  # static scheduling 
+  volumes:
+  - name: ashuvol1 # name of volume that will be created 
+    emptyDir: {}  # will take storage from random location from that minion node where it will be scheduled
+  containers:
+  - command: ["/bin/sh","-c","while true;do date >>/mnt/cisco/index.html; sleep 3 ; done"]
+    image: alpine
+    name: ashuemppod
+    volumeMounts:
+    - name: ashuvol1 # same volume as above we created 
+      mountPath: /mnt/cisco #this directory will be created on the POD automatically if not present 
+
+  - image: nginx
+    name: ashungc1 
+    ports:
+    - containerPort: 80
+    volumeMounts: 
+    - name: ashuvol1 
+      mountPath: /usr/share/nginx/html  
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  
+  ```
+  
+  ## multi container images pod
+  
+  <img src="multicont.png">
+  
+  ```
+  
+  ❯ cat  emppod.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashuemppod
+    x: helloashu
+  name: ashuemppod
+  namespace: ashu-space
+spec:
+  nodeName: worker1  # static scheduling 
+  volumes:
+  - name: ashuvol1 # name of volume that will be created 
+    emptyDir: {}  # will take storage from random location from that minion node where it will be scheduled
+  containers:
+  - command: ["/bin/sh","-c","while true;do date >>/mnt/cisco/index.html; sleep 3 ; done"]
+    image: alpine
+    name: ashuemppod
+    volumeMounts:
+    - name: ashuvol1 # same volume as above we created 
+      mountPath: /mnt/cisco #this directory will be created on the POD automatically if not present 
+
+  - image: nginx
+    name: ashungc1 
+    ports:
+    - containerPort: 80
+    volumeMounts: 
+    - name: ashuvol1 
+      mountPath: /usr/share/nginx/html  
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+❯ kubectl replace -f  emppod.yml --force
+pod "ashuemppod" deleted
+pod/ashuemppod replaced
+
+```
 
 
