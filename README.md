@@ -201,4 +201,141 @@ pod/ashuemppod replaced
 
 ```
 
+# HostPath volume 
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: hostpod
+  name: hostpod
+spec:
+  volumes:
+  - name: ashuvol2
+    hostPath:
+     path: /data123  # location from Minion Node
+     type: DirectoryOrCreate  # check if not present on the host then create it 
+  - name: ashuvol3
+    emptyDir: {} 
+  containers:
+  - image: alpine
+    name: hostpod
+    command: ["/bin/sh","-c","while true;do cal >>/mnt/data.txt;sleep 5 ;done"]
+    volumeMounts:
+    - name: ashuvol2
+      mountPath: /mnt/
+    - name: ashuvol3
+      mountPath: /datanew  
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  
+  ```
+  
+  # portainer with Deployment 
+  
+  ```
+  ❯ cat portainer.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: portainer
+  name: portainer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portainer
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: portainer
+    spec:
+      volumes:
+      - name: ashuweb
+        hostPath:
+         path: /var/run/docker.sock
+         type: Socket
+      containers:
+      - image: portainer/portainer
+        name: portainer
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+        - name: ashuweb
+          mountPath: /var/run/docker.sock
+        resources: {}
+        
+  ```
+  
+  # LoadBalancer service 
+  
+  <img src="lbsvc.png">
+  
+  # Persistent volume (PV)
+  
+  <img src="pv.png">
+  
+  ## PV 
+  
+  ```
+  ❯ cat ashupv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ashu-pv-1
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany   # ReadWriteOnce , ReadOnlyMany , ReadWriteMany 
+  nfs:
+    server: 172.31.25.191  # IP of NFS server 
+    path: /storage/ashu  # location of NFS server 
+    
+```
+
+## PVC
+
+```
+
+❯ cat ashu-pvc.yml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ashu-pvc
+  namespace: ashu-space 
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 2Gi
+      
+```
+
+## pvc bound 
+
+```
+❯ kubectl apply -f ashu-pvc.yml
+persistentvolumeclaim/ashu-pvc created
+❯ kubectl get pvc -n ashu-space
+NAME       STATUS   VOLUME        CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+ashu-pvc   Bound    saurav-pv-1   2Gi        RWX                           7s
+❯ kubectl get pv
+NAME          CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                 STORAGECLASS   REASON   AGE
+ashu-pv-1     5Gi        RWX            Retain           Available                                                 4m26s
+ragpv1        2Gi        RWX            Retain           Available                                                 6m22s
+saurav-pv-1   2Gi        RWX            Retain           Bound       ashu-space/ashu-pvc
+
+```
+
+
 
