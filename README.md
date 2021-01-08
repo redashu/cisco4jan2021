@@ -676,5 +676,33 @@ status:
   loadBalancer: {}
   
  ```
+ ## context information 
  
+ ```
+ ❯ kubectl  config get-contexts
+CURRENT   NAME                                                       CLUSTER                                                    AUTHINFO                                                   NAMESPACE
+*         arn:aws:eks:ap-south-1:061112302981:cluster/ciscojan2021   arn:aws:eks:ap-south-1:061112302981:cluster/ciscojan2021   arn:aws:eks:ap-south-1:061112302981:cluster/ciscojan2021   
+          kubernetes-admin@kubernetes                                kubernetes                                                 kubernetes-admin                                           
+❯ 
+❯ kubectl config use-context  kubernetes-admin
+error: no context exists with the name: "kubernetes-admin"
+❯ kubectl config use-context  kubernetes-admin@kubernetes
+Switched to context "kubernetes-admin@kubernetes".
+❯ kubectl get no
+NAME        STATUS   ROLES                  AGE    VERSION
+k8smaster   Ready    control-plane,master   2d3h   v1.20.1
+worker1     Ready    <none>                 2d3h   v1.20.1
+worker2     Ready    <none>                 2d3h   v1.20.1
+worker3     Ready    <none>                 2d3h   v1.20.1
+❯ 
+❯ kubectl config use-context  arn:aws:eks:ap-south-1:061112302981:cluster/ciscojan2021
+Switched to context "arn:aws:eks:ap-south-1:061112302981:cluster/ciscojan2021".
+❯ kubectl get no
+NAME                                           STATUS   ROLES    AGE     VERSION
+ip-172-31-37-237.ap-south-1.compute.internal   Ready    <none>   7m37s   v1.18.9-eks-d1db3c
+ip-172-31-4-1.ap-south-1.compute.internal      Ready    <none>   7m36s   v1.18.9-eks-d1db3c
+
+```
+
+
  
