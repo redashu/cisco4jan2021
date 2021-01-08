@@ -351,5 +351,161 @@ default   1         24h
 
 ```
 
+## service account 
+
+```
+❯ kubectl get  sa  -n ashu-space
+NAME      SECRETS   AGE
+default   1         26h
+❯ kubectl get  secret   -n ashu-space
+NAME                  TYPE                                  DATA   AGE
+ashudbsec             Opaque                                1      21h
+ashuimgcred           kubernetes.io/dockerconfigjson        1      22h
+assuracred            kubernetes.io/dockerconfigjson        1      22h
+default-token-9ngzx   kubernetes.io/service-account-token   3      26h
+❯ kubectl describe   secret  default-token-9ngzx   -n ashu-space
+Name:         default-token-9ngzx
+Namespace:    ashu-space
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: default
+              kubernetes.io/service-account.uid: ffd043fe-eaa2-40f8-a93f-9574216b52c2
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1066 bytes
+namespace:  10 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IkE0c3ZvMmRJYjZHRXQwQkp1SkZlSjFHTTRaamlCYmk2bXpCekctc0I5Z1EifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJhc2h1LXNwYWNlIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tOW5nengiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8
+
+```
+
+# Deployment of Dashboard in kubernetes 
+
+```
+❯ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+namespace/kubernetes-dashboard created
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+deployment.apps/dashboard-metrics-scraper created
+❯ kubectl   get  ns
+NAME                   STATUS   AGE
+ashu-space             Active   26h
+chandranamespace       Active   26h
+default                Active   2d1h
+kube-node-lease        Active   2d1h
+kube-public            Active   2d1h
+kube-system            Active   2d1h
+kubernetes-dashboard   Active   17s
+rag-space              Active   26h
+saurav-space           Active   26h
+surabhi-space          Active   4h9m
+❯ kubectl  get  deployment -n kubernetes-dashboard
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+dashboard-metrics-scraper   1/1     1            1           48s
+kubernetes-dashboard        1/1     1            1           48s
+❯ kubectl  get  po -n kubernetes-dashboard
+NAME                                         READY   STATUS    RESTARTS   AGE
+dashboard-metrics-scraper-7b59f7d4df-r8c26   1/1     Running   0          63s
+kubernetes-dashboard-74d688b6bc-pq4jv        1/1     Running   0          63s
+❯ kubectl  get  svc  -n kubernetes-dashboard
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+dashboard-metrics-scraper   ClusterIP   10.98.51.158    <none>        8000/TCP   75s
+kubernetes-dashboard        ClusterIP   10.101.36.245   <none>        443/TCP    76s
+❯ kubectl  get  sa  -n kubernetes-dashboard
+NAME                   SECRETS   AGE
+default                1         104s
+kubernetes-dashboard   1         104s
+❯ kubectl  get  secret   -n kubernetes-dashboard
+NAME                               TYPE                                  DATA   AGE
+default-token-t9bnj                kubernetes.io/service-account-token   3      115s
+kubernetes-dashboard-certs         Opaque                                0      115s
+kubernetes-dashboard-csrf          Opaque                                1      115s
+kubernetes-dashboard-key-holder    Opaque                                2      115s
+kubernetes-dashboard-token-bcx2g   kubernetes.io/service-account-token   3      115s
+
+
+```
+
+## check secret 
+
+```
+❯ kubectl  get  sa -n kubernetes-dashboard
+NAME                   SECRETS   AGE
+default                1         7m11s
+kubernetes-dashboard   1         7m11s
+❯ kubectl  get  secret  -n kubernetes-dashboard
+NAME                               TYPE                                  DATA   AGE
+default-token-t9bnj                kubernetes.io/service-account-token   3      7m18s
+kubernetes-dashboard-certs         Opaque                                0      7m18s
+kubernetes-dashboard-csrf          Opaque                                1      7m18s
+kubernetes-dashboard-key-holder    Opaque                                2      7m18s
+kubernetes-dashboard-token-bcx2g   kubernetes.io/service-account-token   3      7m18s
+❯ kubectl describe   secret  kubernetes-dashboard-token-bcx2g   -n kubernetes-dashboard
+Name:         kubernetes-dashboard-token-bcx2g
+Namespace:    kubernetes-dashboard
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: kubernetes-dashboard
+              kubernetes.io/service-account.uid: ea3cc437-b58e-4c10-96c1-f981602208fc
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+namespace:  20 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IkE0c3ZvMmRJYjZHRXQwQkp1SkZlSjFHTTRaamlCYmk2bXpCekctc0I5Z1EifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZC10b2tlbi1iY3gyZyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImVhM2NjNDM3LWI1OGUtNGMxMC05NmMxLWY5ODE2MDIyMDhmYyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlcm5ldGVzLWRhc2hib2FyZDprdWJlcm5ldGVzLWRhc2hib2FyZCJ9.u9jep1JGVBV3yb9gS2Z7-RC4Ga2CXigF12GtdcqsAgIRBeOdyaXo_LORZ_ndtOiRsh6geEqQnzRmM9mVz37RKUjgIB6pbNHa-5KnYOumqwL6WHBDUf0wJdEWEJlYK6w30Vazhmhc4JKtmEPYSILesnFcZ10v1aaB2Fjo4NSDNcIqP7CQJL_pbARycXZPcJ2ywrxyufiiovOa-QhIzp2_oMdTM_U7ls6_GuRWhUf0dFRhVeyBm-Vx7FeylC6Gr8z2723d4yltjIPdQeIVjcL5-XK88TYhzlmA72zjUHhVGBPHA80Wmmdk7P3JK9KhC9W6fzyTdTRQ7nu67g5hnnFicQ
+
+```
+
+## checking clusterrole for dashboard service account 
+
+```
+❯ kubectl  get clusterroles
+NAME                                                                   CREATED AT
+admin                                                                  2021-01-06T07:33:51Z
+calico-kube-controllers                                                2021-01-06T09:34:06Z
+calico-node                                                            2021-01-06T09:34:06Z
+cluster-admin                                                          2021-01-06T07:33:51Z
+edit                                                                   2021-01-06T07:33:51Z
+kubeadm:get-nodes                                                      2021-01-06T07:33:53Z
+kubernetes-dashboard                                                   2021-01-08T08:48:35Z
+system:aggregate-to-admin                                              2021-01-06T07:33:51Z
+system:aggregate-to-edit                                               2021-01-06T07:33:51Z
+system:aggregate-to-view                                               2021-01-06T07:33:51Z
+system:auth-delegator     
+
+```
+
+## we bind sa of dashboard to cluster role 
+
+```
+❯ cat clusterrolebind.yml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user  # name of cluster role bind api 
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin 
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard # name of service account 
+  namespace: kubernetes-dashboard # namespace 
+❯ kubectl apply -f clusterrolebind.yml
+clusterrolebinding.rbac.authorization.k8s.io/admin-user created
+❯ kubectl get clusterrolebinding -n kubernetes-dashboard
+
+```
 
 
