@@ -611,4 +611,70 @@ spec:
         resources: {}
         
   ```
+## wordpress Deployment of FRONT end 
+
+```
+ kubectl  create  deployment  ashuwebapp --image=wordpress:4.8-apache  --dry-run=client -o yaml >wordpress.yml
+```
+
+## wordpress file 
+
+```
+❯ cat wordpress.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashuwebapp
+  name: ashuwebapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashuwebapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashuwebapp # label of PODS 
+    spec:
+      containers:
+      - image: wordpress:4.8-apache
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: ashudbsvc  # service name of DB deployment 
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+           secretKeyRef:
+            name: dbpass # name of Db secret 
+            key: p # name of key 
+        resources: {}
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashufrontsvc
+  name: ashufrontsvc
+spec:
+  ports:
+  - name: 1133-80
+    port: 1133
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: ashuwebapp  # label of POD  
+  type: NodePort
+status:
+  loadBalancer: {}
   
+ ```
+ 
+ 
