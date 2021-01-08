@@ -337,5 +337,19 @@ saurav-pv-1   2Gi        RWX            Retain           Bound       ashu-space/
 
 ```
 
+# Users in k8s
+
+<img src="user.png">
+
+```
+❯ kubectl  get  serviceaccount -n ashu-space
+NAME      SECRETS   AGE
+default   1         24h
+❯ kubectl  get  sa  -n ashu-space
+NAME      SECRETS   AGE
+default   1         24h
+
+```
+
 
 
