@@ -74,5 +74,47 @@ spec:
   
   ```
   
-  
+ ## Empty access
+ 
+ ```
+  kubectl  get  po -n ashu-space
+NAME         READY   STATUS    RESTARTS   AGE
+ashuemppod   1/1     Running   0          92s
+❯ 
+❯ kubectl exec -it  ashuemppod  -n ashu-space  -- sh
+/ # 
+/ # cd  /mnt/
+/mnt # ls
+cisco
+/mnt # cd  cisco/
+/mnt/cisco # s
+sh: s: not found
+/mnt/cisco # ls
+
+```
+
+
+## changing script 
+
+```
+❯ kubectl replace -f emppod.yml --force
+pod "ashuemppod" deleted
+pod/ashuemppod replaced
+❯ kubectl  get  po -n ashu-space
+NAME         READY   STATUS    RESTARTS   AGE
+ashuemppod   1/1     Running   0          12s
+❯ kubectl exec -it  ashuemppod  -n ashu-space  -- sh
+/ # cd /mnt/cisco/
+/mnt/cisco # ls
+time.txt
+/mnt/cisco # cat  time.txt 
+Fri Jan  8 04:42:44 UTC 2021
+Fri Jan  8 04:42:47 UTC 2021
+Fri Jan  8 04:42:50 UTC 2021
+Fri Jan  8 04:42:53 UTC 2021
+Fri Jan  8 04:42:56 UTC 2021
+
+```
+
+
 
