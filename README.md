@@ -569,4 +569,46 @@ spec:
         
  ```
  
+## DB deploy with secret and PVC 
 
+```
+❯ cat  ashudb.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudb
+  name: ashudb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashudb
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashudb
+    spec:
+      volumes:
+      - name: ashudbvol   # name of volume 
+        persistentVolumeClaim:  # source of volume 
+         claimName: ashu-pvc  # name of PVC 
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        volumeMounts:
+        - name: ashudbvol  # db VOL 
+          mountPath: /var/lib/mysql/  # mysql data store location 
+        env:
+        - name: MYSQL_ROOT_PASSWORD # env variable for mysql image 
+          valueFrom:
+           secretKeyRef:
+            name: dbpass # name of secret 
+            key: p  # key name  
+        resources: {}
+        
+  ```
+  
