@@ -508,4 +508,65 @@ clusterrolebinding.rbac.authorization.k8s.io/admin-user created
 
 ```
 
+## CLoud based kubernetes cluster deployment 
+
+<img src="kaas.png">
+
+# Microservice sample Desing 
+
+<img src="wp.png">
+
+
+## DB deployment 
+
+### creating a secret 
+
+```
+❯ kubectl  create secret generic dbpass  --from-literal  p=Cisco123# -n ashu-space
+secret/dbpass created
+```
+
+## creating database deployment 
+
+```
+kubectl  create deployment  ashudb  --image=mysql:5.6  --dry-run=client -o yaml >ashudb.yml
+
+```
+
+## DB file with secret update
+
+```
+❯ cat ashudb.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashudb
+  name: ashudb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashudb
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashudb
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD # env variable for mysql image 
+          valueFrom:
+           secretKeyRef:
+            name: dbpass # name of secret 
+            key: p  # key name  
+        resources: {}
+        
+ ```
+ 
 
